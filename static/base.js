@@ -1,38 +1,63 @@
-const margin = {top: 10, bottom: 10, left: 10, right: 10}
 //http://bl.ocks.org/ElefHead/ebff082d41ef8b9658059c408096f782
 
+const margin = {top: 10, bottom: 10, left: 10, right: 10}
+const tooltip = d3.select('body')
+    .append('div')
+    .attr('class', 'tooltip')
+    .text('');
+
 function ready(us) {
-    g.append("g")
-        .attr("id", "counties")
-        .selectAll("path")
+    //dodamo okrožja
+    g.append('g')
+        .attr('id', 'counties')
+        .selectAll('path')
         .data(topojson.feature(us, us.objects.counties).features)
-        .enter().append("path")
-        .attr("d", path)
-        .attr("class", "county-boundary")
-        .on("click", reset);
+        .enter()
+        .append('path')
+        .attr('d', path)
+        .attr('class', 'county-boundary')
+        .on('click', reset)
+        .on('mouseover', function (d) {
+            console.log(d.id)
+            return tooltip.text(FIPS_County.get(String(d.id)))
+        })
+        .on('mousemove', function () {
+            return tooltip.style('top', (event.pageY - 10) + 'px').style('left', (event.pageX + 10) + 'px');
+        })
 
-    g.append("g")
-        .attr("id", "states")
-        .selectAll("path")
+    //dodamo države
+    g.append('g')
+        .attr('id', 'states')
+        .selectAll('path')
         .data(topojson.feature(us, us.objects.states).features)
-        .enter().append("path")
-        .attr("d", path)
-        .attr("class", "state")
-        .on("click", clicked);
+        .enter()
+        .append('path')
+        .attr('d', path)
+        .attr('class', 'state')
+        .on('dblclick', clicked)
+        .on('click', reset)
+        .on('mouseover', function (d) {
+            return tooltip.text(FIPS_State.get(d.id));
+        })
+        .on('mousemove', function () {
+            return tooltip.style('top', (event.pageY - 10) + 'px').style('left', (event.pageX + 10) + 'px');
+        })
 
-    g.append("path")
+
+    //robovi, da je bolj pregledno
+    g.append('path')
         .datum(topojson.mesh(us, us.objects.states, function (a, b) {
             return a !== b;
         }))
-        .attr("id", "state-borders")
-        .attr("d", path);
+        .attr('id', 'state-borders')
+        .attr('d', path);
 }
 
 function clicked(d) {
     if (d3.select('.background').node() === this) return reset();
     if (active.node() === this) return reset();
-    active.classed("active", false);
-    active = d3.select(this).classed("active", true);
+    active.classed('active', false);
+    active = d3.select(this).classed('active', true);
 
     let bounds = path.bounds(d),
         dx = bounds[1][0] - bounds[0][0],
@@ -44,17 +69,18 @@ function clicked(d) {
 
     g.transition()
         .duration(800)
-        .style("stroke-width", 1.5 / scale + "px")
-        .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+        .style('stroke-width', 1.5 / scale + 'px')
+        .attr('transform', 'translate(' + translate + ')scale(' + scale + ')');
 }
 
 function reset() {
-    active.classed("active", false);
+    active.classed('active', false);
     active = d3.select(null);
 
     g.transition()
         .delay(100)
         .duration(800)
-        .style("stroke-width", "1.5px")
+        .style('stroke-width', '1.5px')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 }
+

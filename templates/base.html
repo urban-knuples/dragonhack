@@ -13,18 +13,20 @@
 <body>
 
 <nav class="navbar">
-    <h2>Line42 </h2>
+    <h2>Dragonhack 2020 line42 </h2>
 </nav>
 
 <div class="map"></div>
 
+<script type="text/javascript" src="{{ url_for('static', filename='FIPS_State.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='FIPS_County.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='base.js') }}"></script>
 
-<script>
 
-    //const width = parseInt(d3.select('.map').style('width')) - margin.left - margin.right
-    const width = document.body.scrollWidth - margin.left - margin.right - 100
-    const height = width * 0.5
+<script>
+    const width = parseInt(d3.select('.map').style('width')) - margin.left - margin.right
+    const height = width * 0.5 - margin.bottom
+
     let active = d3.select(null);
 
     const svg = d3.select('.map').append('svg')
@@ -32,16 +34,17 @@
         .attr('height', height + margin.top + margin.bottom)
         .attr('width', width + margin.left + margin.right)
 
-
     svg.append('rect')
         .attr('class', 'background center')
         .attr('height', height + margin.top + margin.bottom)
         .attr('width', width + margin.left + margin.right)
-        .on('click', clicked);
+        .on('click', clicked)
+        .on('mouseover', function () {
+            return tooltip.text('')
+        })
 
 
-    Promise.resolve(d3.json("static/us-counties.topojson"))
-        .then(ready);
+    Promise.resolve(d3.json("static/us-counties.topojson")).then(ready);
 
     const projection = d3.geoAlbersUsa()
         .translate([width / 2, height / 2])
@@ -53,7 +56,9 @@
         .attr('class', 'us-state')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
         .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
+        .attr('height', height + margin.top + margin.bottom);
+
+
 </script>
 
 
