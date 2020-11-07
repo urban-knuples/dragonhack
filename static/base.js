@@ -7,7 +7,6 @@ const tooltip = d3.select('body')
     .text('');
 
 function ready(us) {
-
     //dodamo okrožja
     g.append('g')
         .attr('id', 'counties')
@@ -19,7 +18,8 @@ function ready(us) {
         .attr('class', 'county-boundary')
         .on('click', reset)
         .on('mouseover', function (d) {
-            return tooltip.text(d.id) //todo da so okrozja tut
+            console.log(d.id)
+            return tooltip.text(FIPS_County.get(String(d.id)))
         })
         .on('mousemove', function () {
             return tooltip.style('top', (event.pageY - 10) + 'px').style('left', (event.pageX + 10) + 'px');
@@ -37,7 +37,7 @@ function ready(us) {
         .on('dblclick', clicked)
         .on('click', reset)
         .on('mouseover', function (d) {
-            return tooltip.text(fipsToState[d.id]);
+            return tooltip.text(FIPS_State.get(d.id));
         })
         .on('mousemove', function () {
             return tooltip.style('top', (event.pageY - 10) + 'px').style('left', (event.pageX + 10) + 'px');
