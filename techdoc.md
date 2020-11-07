@@ -13,6 +13,10 @@ Just so we don't implement two right legs and no body and try to make it walk.
 - Ustvariti seznam, kjer bo vsako mesto shranjeno v svoj pripadajoci county (need city to county mapper!)
 - Gender and race
 
+### What I'm currently thinking of
+- Potrebno bo dolociti, kaksne vse podatke je potrebno upostevati pri klasifikaciji podatkov
+[county, state, ]
+
 ## API call
 - Moznost filtirati glede na leto shootingov - dolocanje rangov
 - Dobiti 
