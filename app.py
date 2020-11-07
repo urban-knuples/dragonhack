@@ -1,14 +1,13 @@
 from flask import Flask
+from flask import render_template
+
 
 app = Flask(__name__)
 
-count = 0
 
 @app.route('/')
-def hello_world():
-    global count
-    count += 1
-    return 'Hello Dragonhack 2020! (You are visitor: {} )'.format(count)
+def index(param=''):
+    return render_template('base.html', id=param)
 
 
 if __name__ == '__main__':

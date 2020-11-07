@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="si">
+<head>
+    <meta charset="utf-8">
+    <title>Dragonhack 2020 line42</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+    <script type="text/javascript" src="https://d3js.org/topojson.v3.min.js"></script>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <h2>Line42 </h2>
+</nav>
+
+<div class="map"></div>
+
+<script type="text/javascript" src="{{ url_for('static', filename='base.js') }}"></script>
+
+<script>
+
+    //const width = parseInt(d3.select('.map').style('width')) - margin.left - margin.right
+    const width = document.body.scrollWidth - margin.left - margin.right - 100
+    const height = width * 0.5
+    let active = d3.select(null);
+
+    const svg = d3.select('.map').append('svg')
+        .attr('class', 'center')
+        .attr('height', height + margin.top + margin.bottom)
+        .attr('width', width + margin.left + margin.right)
+
+
+    svg.append('rect')
+        .attr('class', 'background center')
+        .attr('height', height + margin.top + margin.bottom)
+        .attr('width', width + margin.left + margin.right)
+        .on('click', clicked);
+
+
+    Promise.resolve(d3.json("static/us-counties.topojson"))
+        .then(ready);
+
+    const projection = d3.geoAlbersUsa()
+        .translate([width / 2, height / 2])
+        .scale(width);
+
+    const path = d3.geoPath().projection(projection);
+
+    const g = svg.append("g")
+        .attr('class', 'us-state')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+</script>
+
+
+</body>
+</html>
