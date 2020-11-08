@@ -13,7 +13,7 @@ const myColor = d3.scaleLinear()
     .domain([0, 1])
 
 async function ready(us) {
-    csvData = await d3.csv('static/Proccesed_county_votes.csv')
+    csvData = await d3.csv('static/Ready_county_votes.csv')
 
     var geojson = topojson.feature(us, us.objects.counties).features;
 //dodamo okrožja
@@ -32,8 +32,20 @@ async function ready(us) {
             if (o === undefined) return "rgb(170, 170, 170)";
             let left = parseInt(o.Votes_Left)
             let right = parseInt(o.Votes_Right)
+            let total = left + right
+            let shootings =parseFloat(o.Normalized_Shootings_rate)
             if (left === 0 && right === 0) return "rgb(170, 170, 170)";
-            return myColor(right / (left + right))
+            //barva = myColor(right / (left + right) ) 
+
+            b = parseInt(right / total *255)
+            r = parseInt(left / total *255)
+            gr = parseInt(shootings*5000 )
+            if(gr<1) gr=1;
+            if(gr>255) gr=255;
+
+            console.log(r)
+            barva = "rgb("+ r + "," + gr + "," +b +")"
+            return barva
         })
         .on('click', reset)
         .on('mouseover', function (d) {
