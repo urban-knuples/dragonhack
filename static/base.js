@@ -13,7 +13,9 @@ const myColor = d3.scaleLinear()
     .domain([0, 1])
 
 async function ready(us) {
-    csvData = await d3.csv('static/Ready_county_votes.csv')
+    csvData = await d3.csv('static/Proccesed_county_votes.csv')
+    predictionData = await d3.csv('static/prediction_results.csv')
+    predictionDataState = await d3.csv('static/prediction_results_state.csv')
 
     var geojson = topojson.feature(us, us.objects.counties).features;
 //dodamo okrožja
@@ -34,8 +36,8 @@ async function ready(us) {
             let right = parseInt(o.Votes_Right)
             let total = left + right
             let shootings =parseFloat(o.Normalized_Shootings_rate)
-            if (left === 0 && right === 0) return "rgb(170, 170, 170)";
-            //barva = myColor(right / (left + right) ) 
+            if (left === 0 && right === 0) return "rgb(170,170,170)";
+            //barva = myColor(right / (left + right) )
 
             b = parseInt(right / total *255)
             r = parseInt(left / total *255)
@@ -51,7 +53,20 @@ async function ready(us) {
         .on('mouseover', function (d) {
             let idString = String(d.id);
             if (idString.length === 4) idString = '0' + idString
-            return tooltip.text(FIPS_County.get(idString))
+
+            var pred = predictionData.find(o => o.county === idString)
+
+            var predictionMsg = ""
+            if (pred === undefined) {
+                predictionMsg = "No data to predict on that area."
+            }
+            else if ((pred.candidate < pred.prediction && pred.prediction < 0.5) || (pred.candidate > pred.prediction && pred.prediction > 0.5)) {
+                predictionMsg = "Correct prediction!"
+            } else {
+                predictionMsg = "Wrong prediction! :c"
+            }
+
+            return tooltip.text(FIPS_County.get(idString) + " = " + predictionMsg)
         })
         .on('mousemove', function () {
             return tooltip.style('top', (event.pageY - 20) + 'px').style('left', (event.pageX + 20) + 'px');
@@ -70,7 +85,21 @@ async function ready(us) {
         .on('dblclick', clicked)
         .on('click', reset)
         .on('mouseover', function (d) {
-            return tooltip.text(FIPS_State.get(d.id));
+            let idString = String(d.id) + "000";
+            if (idString.length === 4) idString = '0' + idString
+
+            var pred = predictionDataState.find(o => o.state === idString)
+
+
+            var predictionMessage = ""
+            if (pred === undefined) {
+                predictionMessage = "No data to predict on state."
+            } else {
+                predictionMessage = " = The model was this accurate: " + parseFloat(pred.correct).toFixed(2) + "%"
+            }
+
+
+            return tooltip.text(FIPS_State.get(d.id) + predictionMessage);
         })
         .on('mousemove', function () {
             return tooltip.style('top', (event.pageY - 20) + 'px').style('left', (event.pageX + 20) + 'px');

@@ -60,11 +60,6 @@
 
     // Create data for circles:
     var markers = [ //TODO FIX MARKER
-       /* {long: -110, lat: 40},
-        {long: -110, lat: 30},
-        {long: -110, lat: 35},
-        {long: -100, lat: 35},
-        {long: -90, lat: 35},*/
     ];
 
 
@@ -78,7 +73,9 @@
         .attr("cy", function (d) {
             return projection([d.long, d.lat])[1]
         })
-        .attr("r", 10) //FIX SIZE BASED ON CRIME
+        .attr("r", (d) => {
+            return d.lat * 2
+        })
         .style("fill", "#11d6a3")
         .attr("stroke", "#11d6a3")
         .attr("stroke-width", 3)
