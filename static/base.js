@@ -15,11 +15,12 @@ const myColor = d3.scaleLinear()
 async function ready(us) {
     csvData = await d3.csv('static/Proccesed_county_votes.csv')
 
+    var geojson = topojson.feature(us, us.objects.counties).features;
 //dodamo okrožja
     g.append('g')
         .attr('id', 'counties')
         .selectAll('path')
-        .data(topojson.feature(us, us.objects.counties).features)
+        .data(geojson)
         .enter()
         .append('path')
         .attr('d', path)
@@ -43,6 +44,7 @@ async function ready(us) {
         .on('mousemove', function () {
             return tooltip.style('top', (event.pageY - 20) + 'px').style('left', (event.pageX + 20) + 'px');
         })
+
 
     //dodamo države
     g.append('g')
@@ -70,6 +72,8 @@ async function ready(us) {
         }))
         .attr('id', 'state-borders')
         .attr('d', path);
+
+    return geojson;
 }
 
 function clicked(d) {
@@ -86,20 +90,31 @@ function clicked(d) {
         scale = .9 / Math.max(dx / width, dy / height),
         translate = [width / 2 - scale * x, height / 2 - scale * y];
 
+    g2.transition()
+        .delay(100)
+        .duration(800)
+        .attr('transform', 'translate(' + translate + ')scale(' + scale + ')');
     g.transition()
         .duration(800)
         .style('stroke-width', 1.5 / scale + 'px')
         .attr('transform', 'translate(' + translate + ')scale(' + scale + ')');
+
+
 }
 
 function reset() {
     active.classed('active', false);
     active = d3.select(null);
 
+    g2.transition()
+        .delay(100)
+        .duration(800)
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
     g.transition()
         .delay(100)
         .duration(800)
         .style('stroke-width', '1.5px')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
 }
 
