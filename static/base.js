@@ -13,7 +13,7 @@ const myColor = d3.scaleLinear()
     .domain([0, 1])
 
 async function ready(us) {
-    csvData = await d3.csv('static/Proccesed_county_votes.csv')
+    csvData = await d3.csv('static/Ready_county_votes.csv')
     predictionData = await d3.csv('static/prediction_results.csv')
     predictionDataState = await d3.csv('static/prediction_results_state.csv')
 
@@ -45,7 +45,8 @@ async function ready(us) {
             if(gr<1) gr=1;
             if(gr>255) gr=255;
 
-            console.log(r)
+            b
+            b
             barva = "rgb("+ r + "," + gr + "," +b +")"
             return barva
         })
