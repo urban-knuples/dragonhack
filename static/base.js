@@ -4,6 +4,8 @@ const margin = {top: 10, bottom: 10, left: 10, right: 10}
 const tooltip = d3.select('body')
     .append('div')
     .attr('class', 'tooltip')
+    .attr('id', 'noselect')
+    .attr('onselectstart', 'return false')
     .text('');
 
 function ready(us) {
@@ -18,11 +20,10 @@ function ready(us) {
         .attr('class', 'county-boundary')
         .on('click', reset)
         .on('mouseover', function (d) {
-            console.log(d.id)
             return tooltip.text(FIPS_County.get(String(d.id)))
         })
         .on('mousemove', function () {
-            return tooltip.style('top', (event.pageY - 10) + 'px').style('left', (event.pageX + 10) + 'px');
+            return tooltip.style('top', (event.pageY - 20) + 'px').style('left', (event.pageX + 20) + 'px');
         })
 
     //dodamo države
@@ -40,7 +41,7 @@ function ready(us) {
             return tooltip.text(FIPS_State.get(d.id));
         })
         .on('mousemove', function () {
-            return tooltip.style('top', (event.pageY - 10) + 'px').style('left', (event.pageX + 10) + 'px');
+            return tooltip.style('top', (event.pageY - 20) + 'px').style('left', (event.pageX + 20) + 'px');
         })
 
 
