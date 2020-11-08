@@ -1,7 +1,7 @@
 victim,gender,race,date,city,state,county,death,charges,mental_illness,weapon,weapon_type,threat,fleeing
 44,Male,Unknown race,10/28/2020,Trigg County,KY,Trigg,Gunshot,No known charges,No,Allegedly Armed,undetermined,undetermined,
 35,Male,Unknown race,10/27/2020,Chattanooga,TN,,Gunshot,No known charges,No,Allegedly Armed,gun,other,
-0,Male,Unknown race,10/27/2020,Herriman,UT,,Gunshot,No known charges,No,Allegedly Armed,undetermined,undetermined,
+,Male,Unknown race,10/27/2020,Herriman,UT,,Gunshot,No known charges,No,Allegedly Armed,undetermined,undetermined,
 27,Male,Unknown race,10/26/2020,Alexandria,VA,,Gunshot,No known charges,No,Allegedly Armed,gun,attack,foot
 27,Male,Black,10/26/2020,Philadelphia,PA,,Gunshot,No known charges,Yes,Allegedly Armed,knife,other,not fleeing
 53,Male,Unknown race,10/25/2020,Phoenix,AZ,,Gunshot,No known charges,No,Allegedly Armed,gun,attack,not fleeing
