@@ -42,6 +42,6 @@ def preprocess(datafile):
 
 
 
-preprocess("CSV_data/president_county_candidate.csv")
+
 
 #preprocess("CSV_data/fatal_police_shootings_detailed.xlsx")
