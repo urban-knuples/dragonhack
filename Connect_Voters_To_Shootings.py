@@ -4,19 +4,27 @@ import csv
 import time
 import datetime
 import numpy as np
+import FIPS_array as FIPS
 
 def process(dataVotes):
 
     
 
-
     dfVotes = pd.read_csv(dataVotes)
     dfVotes['total_shootings'] = dfVotes['State']
     dfVotes['total_shootings'] = 0
     dfVotes['shootings_normalized'] = dfVotes['total_shootings']
+    dfVotes['FIPS'] = dfVotes['total_shootings']
 
     npVotes = dfVotes.to_numpy()
-    print(npVotes.shape)
+    FIPS_array = FIPS.getFIPSarray()
+
+    print(FIPS_array.shape)
+    for line in npVotes:
+        for pair in FIPS_array:
+            if line[1].lower().strip() == pair[1].lower().strip():
+                line[6] = pair[0]
+                break
 
     #state_postal = state_postal.applymap(lambda s:s.lower() if type(s) == str else s)
 
@@ -83,10 +91,10 @@ def process(dataVotes):
     with open('CSV_data/Ready_county_votes.csv', 'w',  encoding='utf-8',newline='') as csvfile:
         filewriter = csv.writer(csvfile, delimiter=',',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        filewriter.writerow(['State', 'County', 'Votes_Left', 'Votes_Right','Total_shootings','Normalized_Shootings_rate'])
+        filewriter.writerow(['State', 'County', 'Votes_Left', 'Votes_Right','Total_shootings','Normalized_Shootings_rate','FIPS'])
         for line in npVotes:
                 #print(line)
-                filewriter.writerow([line[0],line[1],line[2],line[3],line[4],line[5]])
+                filewriter.writerow([line[0],line[1],line[2],line[3],line[4],line[5],line[6]])
 
 
 
