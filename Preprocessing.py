@@ -5,7 +5,7 @@ def preprocess(datafile):
     df = pd.read_csv(datafile)
 
    
-    with open('CSV_data/Proccesed_county_votes.csv', 'w',  encoding='utf-8',newline='') as csvfile:
+    with open('static/Proccesed_county_votes.csv', 'w', encoding='utf-8', newline='') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
             filewriter.writerow(['State', 'County', 'Votes_Left', 'Votes_Right'])

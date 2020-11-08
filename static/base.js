@@ -8,8 +8,14 @@ const tooltip = d3.select('body')
     .attr('onselectstart', 'return false')
     .text('');
 
-function ready(us) {
-    //dodamo okrožja
+const myColor = d3.scaleLinear()
+    .range(["red", "blue"])
+    .domain([0, 1])
+
+async function ready(us) {
+    csvData = await d3.csv('static/Proccesed_county_votes.csv')
+
+//dodamo okrožja
     g.append('g')
         .attr('id', 'counties')
         .selectAll('path')
@@ -18,9 +24,21 @@ function ready(us) {
         .append('path')
         .attr('d', path)
         .attr('class', 'county-boundary')
+        .style("fill", function (d) {//barvanje okrozji
+            let idString = String(d.id);
+            if (idString.length === 4) idString = '0' + idString
+            let o = csvData.find(o => o.County === FIPS_County.get(idString))
+            if (o === undefined) return "rgb(170, 170, 170)";
+            let left = parseInt(o.Votes_Left)
+            let right = parseInt(o.Votes_Right)
+            if (left === 0 && right === 0) return "rgb(170, 170, 170)";
+            return myColor(right / (left + right))
+        })
         .on('click', reset)
         .on('mouseover', function (d) {
-            return tooltip.text(FIPS_County.get(String(d.id)))
+            let idString = String(d.id);
+            if (idString.length === 4) idString = '0' + idString
+            return tooltip.text(FIPS_County.get(idString))
         })
         .on('mousemove', function () {
             return tooltip.style('top', (event.pageY - 20) + 'px').style('left', (event.pageX + 20) + 'px');

@@ -1,8 +1,5 @@
 from flask import Flask
 from flask import render_template
-import mimetypes
-
-mimetypes.add_type('text/js', '.js')
 
 app = Flask(__name__)
 
