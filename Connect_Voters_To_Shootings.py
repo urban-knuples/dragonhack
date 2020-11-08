@@ -21,7 +21,7 @@ def process(dataVotes):
     #state_postal = state_postal.applymap(lambda s:s.lower() if type(s) == str else s)
 
 
-
+    max_shooting_rate = 0
     shootinsgByState = postalToState()
     shootinsgByState = shootinsgByState.groupby(['state'])
     for state,data_by_state in shootinsgByState:
@@ -41,6 +41,9 @@ def process(dataVotes):
                 #print(line.shape)
                 if line[0].lower().strip() == state.lower().strip() and (line[1].lower().strip() == county.lower().strip()   or line[1].lower().strip() == (county +" county").lower().strip()       ):
                     line[4] = shootingsByCounty
+                    line[5]= int(line[4])/(int(line[3])+int(line[2]))
+                    if(line[5]>max_shooting_rate):
+                        max_shooting_rate=line[5]
 
             """
             val = dict()
@@ -69,17 +72,21 @@ def process(dataVotes):
                             
 
                 
-                
+    for line in npVotes:
+         x= float(line[5])/max_shooting_rate
+         line[5] = format(x, '.3f')
+
+
 
 
     #dfVotes.to_csv('CSV_data/Show_data.csv')
     with open('CSV_data/Ready_county_votes.csv', 'w',  encoding='utf-8',newline='') as csvfile:
         filewriter = csv.writer(csvfile, delimiter=',',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        filewriter.writerow(['State', 'County', 'Votes_Left', 'Votes_Right','Total_shootings'])
+        filewriter.writerow(['State', 'County', 'Votes_Left', 'Votes_Right','Total_shootings','Normalized_Shootings_rate'])
         for line in npVotes:
                 #print(line)
-                filewriter.writerow([line[0],line[1],line[2],line[3],line[4]])
+                filewriter.writerow([line[0],line[1],line[2],line[3],line[4],line[5]])
 
 
 
